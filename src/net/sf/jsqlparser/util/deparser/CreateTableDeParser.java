@@ -47,6 +47,7 @@ public class CreateTableDeParser {
 
 			}
 
+                        //TODO si la tabla no tiene índices, esto lanza nullpointerexception
 			for (Iterator iter = createTable.getIndexes().iterator(); iter.hasNext();) {
 				buffer.append(",\n");
 				Index index = (Index) iter.next();
