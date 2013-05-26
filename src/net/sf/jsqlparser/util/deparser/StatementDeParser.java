@@ -35,8 +35,7 @@ public class StatementDeParser implements StatementVisitor {
 	}
 
 	public void visit(Drop drop) {
-		// TODO Auto-generated method stub
-
+        buffer.append(drop.toString());
 	}
 
 	public void visit(Insert insert) {
