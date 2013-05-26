@@ -23,7 +23,7 @@ public class CreateTableDeParser {
 	public void deParse(CreateTable createTable) {
 		buffer.append("CREATE TABLE " + createTable.getTable().getWholeTableName());
 		if (createTable.getColumnDefinitions() != null) {
-			buffer.append(" { ");
+			buffer.append(" ( ");
 			for (Iterator iter = createTable.getColumnDefinitions().iterator(); iter.hasNext();) {
 				ColumnDefinition columnDefinition = (ColumnDefinition) iter.next();
 				buffer.append(columnDefinition.getColumnName());
@@ -48,25 +48,30 @@ public class CreateTableDeParser {
 			}
 
                         //TODO si la tabla no tiene índices, esto lanza nullpointerexception
-			for (Iterator iter = createTable.getIndexes().iterator(); iter.hasNext();) {
-				buffer.append(",\n");
-				Index index = (Index) iter.next();
-				buffer.append(index.getType() + " " + index.getName());
-				buffer.append("(");
-				for (Iterator iterator = index.getColumnsNames().iterator(); iterator.hasNext();) {
-					buffer.append((String) iterator.next());
-					if (iterator.hasNext()) {
-						buffer.append(", ");
-					}
-				}
-				buffer.append(")");
+            if (createTable.getIndexes() != null) {
+                for (Iterator iter = createTable.getIndexes().iterator(); iter.hasNext();) {
+                    buffer.append(",\n");
+                    Index index = (Index) iter.next();
+                    buffer.append(index.getType() + " ");
+                    if (index.getName() != null) {
+                        buffer.append(index.getName() + " ");
+                    };
+                    buffer.append("(");
+                    for (Iterator iterator = index.getColumnsNames().iterator(); iterator.hasNext();) {
+                        buffer.append((String) iterator.next());
+                        if (iterator.hasNext()) {
+                            buffer.append(", ");
+                        }
+                    }
+                    buffer.append(")");
 
-				if (iter.hasNext())
-					buffer.append(",\n");
-			}
+                    if (iter.hasNext())
+                        buffer.append(",\n");
+                }
+            }
 
-			buffer.append(" \n} ");
-		}
+            buffer.append(" \n) ");
+        }
 	}
 	
 	public StringBuffer getBuffer() {
