@@ -71,4 +71,12 @@
     nbproject/build-impl.xml file. 
 
     -->
+
+    <target name="-pre-compile">
+        <javacc
+            target="src/net/sf/jsqlparser/parser/JSqlParserCC.jj"
+            outputdirectory="src/net/sf/jsqlparser/parser"
+            javacchome="C:/javacc-5.0"
+        />
+    </target>
 </project>
