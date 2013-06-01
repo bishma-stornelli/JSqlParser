@@ -35,7 +35,7 @@ public class DateValue implements Expression {
 		this.value = Date.valueOf(value.substring(1, value.length()-1));
 	}
 	
-	public void accept(ExpressionVisitor expressionVisitor) {
+	public void accept(ExpressionVisitor expressionVisitor) throws Exception {
 		expressionVisitor.visit(this);
 	}
 

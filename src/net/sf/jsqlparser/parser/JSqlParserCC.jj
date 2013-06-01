@@ -208,9 +208,14 @@ TOKEN: /* SQL Keywords. prefixed with K_ to avoid name clashes */
 |   <K_NATURAL:"NATURAL">
 |   <K_REPLACE:"REPLACE">
 |   <K_BETWEEN:"BETWEEN">
+|   <K_FOREIGN:"FOREIGN">
 |   <K_TRUNCATE:"TRUNCATE">
 |   <K_DISTINCT:"DISTINCT">
+|   <K_STARTING:"STARTING">
 |   <K_INTERSECT:"INTERSECT">
+|   <K_CONSTRAINT:"CONSTRAINT">
+|   <K_REFERENCES:"REFERENCES">
+|   <K_SIMILARITY:"SIMILARITY">
 }
 
 
@@ -831,15 +836,27 @@ OrderByElement OrderByElement():
 {
 	OrderByElement orderByElement = new OrderByElement(); 
 	List retval = new ArrayList();
-	Expression columnReference = null;
+        Column column = null;
+	Expression columnReference = null, fuzzyStart = null;
 }
 {
-	columnReference = SimpleExpression()
+    LOOKAHEAD(2)
+    column = Column()
+    <K_STARTING> <K_FROM>
+    fuzzyStart = PrimaryExpression()
+    {
+        orderByElement.setExpression(column);
+        orderByElement.setFuzzyStart(fuzzyStart);
+        return orderByElement;
+    }
+|
+    columnReference = SimpleExpression()
+
     [<K_ASC> | (<K_DESC> { orderByElement.setAsc(false); } )  ]
-	{
-    	orderByElement.setExpression(columnReference);
-		return orderByElement;
-	}
+    {
+    orderByElement.setExpression(columnReference);
+            return orderByElement;
+    }
 }
 
 Limit Limit():
@@ -1596,7 +1613,27 @@ CreateTable CreateTable():
 							coldef.setColumnSpecStrings(columnSpecs);
 						columnDefinitions.add(coldef);
 					}
+				)/*
+				|
+				(
+					columnName=<S_IDENTIFIER> 
+					colDataType = ColDataType()
+					{
+						columnSpecs = new ArrayList();
+					}
+				
+					( 	parameter=CreateParameter() { columnSpecs.add(parameter); } 	)*
+		
+					{ 
+						coldef = new ColumnDefinition();
+						coldef.setColumnName(columnName.image);
+						coldef.setColDataType(colDataType);
+						if (columnSpecs.size() > 0)
+							coldef.setColumnSpecStrings(columnSpecs);
+						columnDefinitions.add(coldef);
+					}
 				)
+                                CONSTRAINT fk_PerOrders FOREIGN KEY (P_Id) REFERENCES Persons(P_Id)*/
 			)
 		)* 
 		

@@ -38,7 +38,7 @@ public class LikeExpression extends BinaryExpression {
 		not = b;
 	}
 
-	public void accept(ExpressionVisitor expressionVisitor) {
+	public void accept(ExpressionVisitor expressionVisitor) throws Exception {
 		expressionVisitor.visit(this);
 	}
 

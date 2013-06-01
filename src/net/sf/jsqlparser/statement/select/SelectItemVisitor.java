@@ -27,8 +27,8 @@ import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 
 public interface SelectItemVisitor {
-	public void visit(AllColumns allColumns);
-	public void visit(AllTableColumns allTableColumns);
-	public void visit(SelectExpressionItem selectExpressionItem);
+	public void visit(AllColumns allColumns) throws Exception;
+	public void visit(AllTableColumns allTableColumns) throws Exception;
+	public void visit(SelectExpressionItem selectExpressionItem) throws Exception;
 
 }

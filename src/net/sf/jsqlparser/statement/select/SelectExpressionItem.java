@@ -48,7 +48,7 @@ public class SelectExpressionItem implements SelectItem {
 		this.expression = expression;
 	}
 
-	public void accept(SelectItemVisitor selectItemVisitor) {
+	public void accept(SelectItemVisitor selectItemVisitor) throws Exception {
 		selectItemVisitor.visit(this);
 	}
 	

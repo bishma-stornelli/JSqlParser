@@ -11,7 +11,7 @@ public class Drop implements Statement {
 	private String name;
 	private List parameters;
 	
-	public void accept(StatementVisitor statementVisitor) {
+	public void accept(StatementVisitor statementVisitor) throws Exception {
 		statementVisitor.visit(this);
 	}
 

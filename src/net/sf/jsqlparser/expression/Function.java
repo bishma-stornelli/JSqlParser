@@ -35,7 +35,7 @@ public class Function implements Expression {
 	private boolean distinct = false;
 	private boolean isEscaped = false;
 	
-	public void accept(ExpressionVisitor expressionVisitor) {
+	public void accept(ExpressionVisitor expressionVisitor) throws Exception {
 		expressionVisitor.visit(this);
 	}
 	

@@ -10,57 +10,63 @@ import net.sf.jsqlparser.statement.update.Update;
  * an {@link net.sf.jsqlparser.statement.update.Update}
  */
 public class UpdateDeParser {
-	protected StringBuffer buffer;
-	protected ExpressionVisitor expressionVisitor;
-	
-	public UpdateDeParser() {
-	}
-	
-	/**
-	 * @param expressionVisitor a {@link ExpressionVisitor} to de-parse expressions. It has to share the same<br>
-	 * StringBuffer (buffer parameter) as this object in order to work
-	 * @param buffer the buffer that will be filled with the select
-	 */
-	public UpdateDeParser(ExpressionVisitor expressionVisitor, StringBuffer buffer) {
-		this.buffer = buffer;
-		this.expressionVisitor = expressionVisitor;
-	}
 
-	public StringBuffer getBuffer() {
-		return buffer;
-	}
+    protected StringBuffer buffer;
+    protected ExpressionVisitor expressionVisitor;
 
-	public void setBuffer(StringBuffer buffer) {
-		this.buffer = buffer;
-	}
+    public UpdateDeParser() {
+    }
 
-	public void deParse(Update update) {
-		buffer.append("UPDATE " + update.getTable().getWholeTableName() + " SET ");
-		for (int i = 0; i < update.getColumns().size(); i++) {
-			Column column = (Column) update.getColumns().get(i);
-			buffer.append(column.getWholeColumnName() + "=");
+    /**
+     * @param expressionVisitor a {@link ExpressionVisitor} to de-parse expressions. It has to share the same<br>
+     * StringBuffer (buffer parameter) as this object in order to work
+     * @param buffer the buffer that will be filled with the select
+     */
+    public UpdateDeParser(ExpressionVisitor expressionVisitor, StringBuffer buffer) {
+        this.buffer = buffer;
+        this.expressionVisitor = expressionVisitor;
+    }
 
-			Expression expression = (Expression) update.getExpressions().get(i);
-			expression.accept(expressionVisitor);
-			if (i < update.getColumns().size() - 1) {
-				buffer.append(", ");
-			}
+    public StringBuffer getBuffer() {
+        return buffer;
+    }
 
-		}
-		
-		if (update.getWhere() != null) {
-			buffer.append(" WHERE ");
-			update.getWhere().accept(expressionVisitor);
-		}
+    public void setBuffer(StringBuffer buffer) {
+        this.buffer = buffer;
+    }
 
-	}
+    public void deParse(Update update) {
+        buffer.append("UPDATE " + update.getTable().getWholeTableName() + " SET ");
+        for (int i = 0; i < update.getColumns().size(); i++) {
+            Column column = (Column) update.getColumns().get(i);
+            buffer.append(column.getWholeColumnName() + "=");
 
-	public ExpressionVisitor getExpressionVisitor() {
-		return expressionVisitor;
-	}
+            Expression expression = (Expression) update.getExpressions().get(i);
+            try {
+                expression.accept(expressionVisitor);
+            } catch (Exception e) {
+            }
+            if (i < update.getColumns().size() - 1) {
+                buffer.append(", ");
+            }
 
-	public void setExpressionVisitor(ExpressionVisitor visitor) {
-		expressionVisitor = visitor;
-	}
+        }
 
+        if (update.getWhere() != null) {
+            buffer.append(" WHERE ");
+            try {
+                update.getWhere().accept(expressionVisitor);
+            } catch (Exception e) {
+            }
+        }
+
+    }
+
+    public ExpressionVisitor getExpressionVisitor() {
+        return expressionVisitor;
+    }
+
+    public void setExpressionVisitor(ExpressionVisitor visitor) {
+        expressionVisitor = visitor;
+    }
 }

@@ -32,7 +32,7 @@ public class Select implements Statement {
 	private SelectBody selectBody;
 	private List withItemsList;
 	
-	public void accept(StatementVisitor statementVisitor) {
+	public void accept(StatementVisitor statementVisitor) throws Exception {
 		statementVisitor.visit(this);
 	}
 

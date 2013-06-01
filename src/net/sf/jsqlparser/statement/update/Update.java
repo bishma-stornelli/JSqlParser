@@ -38,7 +38,7 @@ public class Update implements Statement {
 	private List columns;
 	private List expressions;
 
-	public void accept(StatementVisitor statementVisitor) {
+	public void accept(StatementVisitor statementVisitor) throws Exception {
 		statementVisitor.visit(this);
 	}
 

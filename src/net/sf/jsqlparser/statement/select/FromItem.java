@@ -27,7 +27,7 @@ package net.sf.jsqlparser.statement.select;
  * (for example a table or a sub-select) 
  */
 public interface FromItem {
-	public void accept(FromItemVisitor fromItemVisitor);
+	public void accept(FromItemVisitor fromItemVisitor) throws Exception;
 	public String getAlias();
 	public void setAlias(String alias);
 	

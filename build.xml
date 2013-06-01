@@ -72,11 +72,15 @@
 
     -->
 
+    <delete file="src/net/sf/jsqlparser/parser/TokenMgrError.java"/>
+    <delete file="src/net/sf/jsqlparser/parser/ParseException.java"/>
+    <delete file="src/net/sf/jsqlparser/parser/Token.java"/>
+    <delete file="src/net/sf/jsqlparser/parser/SimpleCharStream.java"/>
     <target name="-pre-compile">
         <javacc
             target="src/net/sf/jsqlparser/parser/JSqlParserCC.jj"
             outputdirectory="src/net/sf/jsqlparser/parser"
-            javacchome="C:/javacc-5.0"
+            javacchome="/usr/share/java"
         />
     </target>
 </project>

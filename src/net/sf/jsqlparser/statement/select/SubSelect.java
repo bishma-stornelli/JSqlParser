@@ -35,7 +35,7 @@ public class SubSelect implements FromItem, Expression, ItemsList {
 	private SelectBody selectBody;
 	private String alias;
 
-	public void accept(FromItemVisitor fromItemVisitor) {
+	public void accept(FromItemVisitor fromItemVisitor) throws Exception {
 		fromItemVisitor.visit(this);
 	}
 
@@ -47,7 +47,7 @@ public class SubSelect implements FromItem, Expression, ItemsList {
 		selectBody = body;
 	}
 
-	public void accept(ExpressionVisitor expressionVisitor) {
+	public void accept(ExpressionVisitor expressionVisitor) throws Exception {
 		expressionVisitor.visit(this);
 	}
 
@@ -59,7 +59,7 @@ public class SubSelect implements FromItem, Expression, ItemsList {
 		alias = string;
 	}
 
-	public void accept(ItemsListVisitor itemsListVisitor) {
+	public void accept(ItemsListVisitor itemsListVisitor) throws Exception {
 		itemsListVisitor.visit(this);
 	}
 

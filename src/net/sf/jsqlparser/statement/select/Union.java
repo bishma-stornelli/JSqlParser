@@ -35,7 +35,7 @@ public class Union implements SelectBody {
 	private boolean all;
 	
 	
-	public void accept(SelectVisitor selectVisitor){
+	public void accept(SelectVisitor selectVisitor) throws Exception{
 		selectVisitor.visit(this);
 	}
 

@@ -27,5 +27,5 @@ package net.sf.jsqlparser.statement.select;
  * (that is, any column or expression etc to be retrieved with the query)
  */
 public interface SelectItem {
-	public void accept(SelectItemVisitor selectItemVisitor);
+	public void accept(SelectItemVisitor selectItemVisitor) throws Exception;
 }

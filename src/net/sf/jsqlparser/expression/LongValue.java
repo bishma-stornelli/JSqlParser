@@ -37,7 +37,7 @@ public class LongValue implements Expression {
 		setStringValue(value);
 	}
 
-	public void accept(ExpressionVisitor expressionVisitor) {
+	public void accept(ExpressionVisitor expressionVisitor) throws Exception {
 		expressionVisitor.visit(this);
 	}
 

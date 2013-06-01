@@ -10,7 +10,7 @@ import net.sf.jsqlparser.statement.StatementVisitor;
 public class Truncate implements Statement {
 	private Table table;
 
-	public void accept(StatementVisitor statementVisitor) {
+	public void accept(StatementVisitor statementVisitor) throws Exception {
 		statementVisitor.visit(this);
 	}
 

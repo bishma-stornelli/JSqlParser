@@ -13,7 +13,7 @@ public class AllComparisonExpression implements Expression {
 		return subSelect;
 	}
 	
-	public void accept(ExpressionVisitor expressionVisitor) {
+	public void accept(ExpressionVisitor expressionVisitor) throws Exception {
 		expressionVisitor.visit(this);
 	}
 

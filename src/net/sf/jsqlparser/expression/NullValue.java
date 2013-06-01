@@ -26,7 +26,7 @@ package net.sf.jsqlparser.expression;
  *  A "NULL" in a sql statement
  */
 public class NullValue implements Expression {
-	public void accept(ExpressionVisitor expressionVisitor) {
+	public void accept(ExpressionVisitor expressionVisitor) throws Exception {
 		expressionVisitor.visit(this);
 	}
 

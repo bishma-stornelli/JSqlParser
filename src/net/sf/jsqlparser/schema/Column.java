@@ -75,7 +75,7 @@ public class Column implements Expression {
 
 	}
 	
-	public void accept(ExpressionVisitor expressionVisitor) {
+	public void accept(ExpressionVisitor expressionVisitor) throws Exception {
 		expressionVisitor.visit(this);
 	}
 

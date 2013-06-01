@@ -47,7 +47,7 @@ public class ExpressionList implements ItemsList {
 		expressions = list;
 	}
 
-	public void accept(ItemsListVisitor itemsListVisitor) {
+	public void accept(ItemsListVisitor itemsListVisitor) throws Exception {
 		itemsListVisitor.visit(this);
 	}
 

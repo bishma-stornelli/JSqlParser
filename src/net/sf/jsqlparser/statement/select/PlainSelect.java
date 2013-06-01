@@ -102,7 +102,7 @@ public class PlainSelect implements SelectBody {
 		joins = list;
 	}
 
-	public void accept(SelectVisitor selectVisitor){
+	public void accept(SelectVisitor selectVisitor) throws Exception{
 		selectVisitor.visit(this);
 	}
 

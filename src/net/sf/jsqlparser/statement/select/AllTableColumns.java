@@ -46,7 +46,7 @@ public class AllTableColumns implements SelectItem {
 		this.table = table;
 	}
 
-	public void accept(SelectItemVisitor selectItemVisitor) {
+	public void accept(SelectItemVisitor selectItemVisitor) throws Exception {
 		selectItemVisitor.visit(this);
 	}
 	

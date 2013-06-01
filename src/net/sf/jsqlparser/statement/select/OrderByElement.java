@@ -30,6 +30,7 @@ import net.sf.jsqlparser.expression.Expression;
  */
 public class OrderByElement {
 	private Expression expression;
+	private Expression fuzzyStart;
 	private boolean asc = true; 
 	
 
@@ -41,8 +42,16 @@ public class OrderByElement {
 		asc = b;
 	}
 
+        public Expression getFuzzyStart() {
+            return fuzzyStart;
+        }
 
-	public void accept(OrderByVisitor orderByVisitor){
+        public void setFuzzyStart(Expression b) {
+            fuzzyStart = b;
+        }
+
+
+	public void accept(OrderByVisitor orderByVisitor) throws Exception{
 		orderByVisitor.visit(this);
 	}
 

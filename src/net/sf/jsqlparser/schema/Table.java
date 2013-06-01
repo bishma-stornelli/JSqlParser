@@ -83,11 +83,11 @@ public class Table implements FromItem {
 
 	}
 
-	public void accept(FromItemVisitor fromItemVisitor) {
+	public void accept(FromItemVisitor fromItemVisitor) throws Exception {
 		fromItemVisitor.visit(this);
 	}
 	
-	public void accept(IntoTableVisitor intoTableVisitor) {
+	public void accept(IntoTableVisitor intoTableVisitor) throws Exception {
 		intoTableVisitor.visit(this);
 	}
 	

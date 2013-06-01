@@ -11,43 +11,45 @@ import net.sf.jsqlparser.statement.create.table.Index;
  * a {@link net.sf.jsqlparser.statement.create.table.CreateTable}
  */
 public class CreateTableDeParser {
-	protected StringBuffer buffer;
 
-	/**
-	 * @param buffer the buffer that will be filled with the select
-	 */
-	public CreateTableDeParser(StringBuffer buffer) {
-		this.buffer = buffer;
-	}
+    protected StringBuffer buffer;
 
-	public void deParse(CreateTable createTable) {
-		buffer.append("CREATE TABLE " + createTable.getTable().getWholeTableName());
-		if (createTable.getColumnDefinitions() != null) {
-			buffer.append(" ( ");
-			for (Iterator iter = createTable.getColumnDefinitions().iterator(); iter.hasNext();) {
-				ColumnDefinition columnDefinition = (ColumnDefinition) iter.next();
-				buffer.append(columnDefinition.getColumnName());
-				buffer.append(" ");
-				buffer.append(columnDefinition.getColDataType().getDataType());
-				if (columnDefinition.getColDataType().getArgumentsStringList() != null) {
-					for (Iterator iterator = columnDefinition.getColDataType().getArgumentsStringList().iterator(); iterator.hasNext();) {
-						buffer.append(" ");
-						buffer.append((String) iterator.next());
-					}
-				}
-				if (columnDefinition.getColumnSpecStrings() != null) {
-					for (Iterator iterator = columnDefinition.getColumnSpecStrings().iterator(); iterator.hasNext();) {
-						buffer.append(" ");
-						buffer.append((String) iterator.next());
-					}
-				}
+    /**
+     * @param buffer the buffer that will be filled with the select
+     */
+    public CreateTableDeParser(StringBuffer buffer) {
+        this.buffer = buffer;
+    }
 
-				if (iter.hasNext())
-					buffer.append(",\n");
+    public void deParse(CreateTable createTable) {
+        buffer.append("CREATE TABLE " + createTable.getTable().getWholeTableName());
+        if (createTable.getColumnDefinitions() != null) {
+            buffer.append(" ( ");
+            for (Iterator iter = createTable.getColumnDefinitions().iterator(); iter.hasNext();) {
+                ColumnDefinition columnDefinition = (ColumnDefinition) iter.next();
+                buffer.append(columnDefinition.getColumnName());
+                buffer.append(" ");
+                buffer.append(columnDefinition.getColDataType().getDataType());
+                if (columnDefinition.getColDataType().getArgumentsStringList() != null) {
+                    for (Iterator iterator = columnDefinition.getColDataType().getArgumentsStringList().iterator(); iterator.hasNext();) {
+                        buffer.append(" ");
+                        buffer.append((String) iterator.next());
+                    }
+                }
+                if (columnDefinition.getColumnSpecStrings() != null) {
+                    for (Iterator iterator = columnDefinition.getColumnSpecStrings().iterator(); iterator.hasNext();) {
+                        buffer.append(" ");
+                        buffer.append((String) iterator.next());
+                    }
+                }
 
-			}
+                if (iter.hasNext()) {
+                    buffer.append(",\n");
+                }
 
-                        //TODO si la tabla no tiene índices, esto lanza nullpointerexception
+            }
+
+            //TODO si la tabla no tiene índices, esto lanza nullpointerexception
             if (createTable.getIndexes() != null) {
                 for (Iterator iter = createTable.getIndexes().iterator(); iter.hasNext();) {
                     buffer.append(",\n");
@@ -65,21 +67,21 @@ public class CreateTableDeParser {
                     }
                     buffer.append(")");
 
-                    if (iter.hasNext())
+                    if (iter.hasNext()) {
                         buffer.append(",\n");
+                    }
                 }
             }
 
             buffer.append(" \n) ");
         }
-	}
-	
-	public StringBuffer getBuffer() {
-		return buffer;
-	}
+    }
 
-	public void setBuffer(StringBuffer buffer) {
-		this.buffer = buffer;
-	}
+    public StringBuffer getBuffer() {
+        return buffer;
+    }
 
+    public void setBuffer(StringBuffer buffer) {
+        this.buffer = buffer;
+    }
 }

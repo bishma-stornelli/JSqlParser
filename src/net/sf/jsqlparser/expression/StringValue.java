@@ -53,7 +53,7 @@ public class StringValue implements Expression {
 		value = string;
 	}
 	
-	public void accept(ExpressionVisitor expressionVisitor) {
+	public void accept(ExpressionVisitor expressionVisitor) throws Exception {
 		expressionVisitor.visit(this);
 	}
 

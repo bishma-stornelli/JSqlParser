@@ -17,7 +17,7 @@ public class CreateTable implements Statement {
     private List columnDefinitions;
     private List indexes;
 
-    public void accept(StatementVisitor statementVisitor) {
+    public void accept(StatementVisitor statementVisitor) throws Exception {
         statementVisitor.visit(this);
     }
 

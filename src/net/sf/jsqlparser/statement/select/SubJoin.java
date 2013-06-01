@@ -31,7 +31,7 @@ public class SubJoin implements FromItem {
 	private Join join;
 	private String alias;
 
-	public void accept(FromItemVisitor fromItemVisitor) {
+	public void accept(FromItemVisitor fromItemVisitor) throws Exception {
 		fromItemVisitor.visit(this);
 	}
 

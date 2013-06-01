@@ -9,44 +9,48 @@ import net.sf.jsqlparser.statement.select.SelectVisitor;
  * a {@link net.sf.jsqlparser.statement.delete.Delete}
  */
 public class DeleteDeParser {
-	protected StringBuffer buffer;
-	protected ExpressionVisitor expressionVisitor;
 
-	public DeleteDeParser() {
-	}
+    protected StringBuffer buffer;
+    protected ExpressionVisitor expressionVisitor;
 
-	/**
-	 * @param expressionVisitor a {@link ExpressionVisitor} to de-parse expressions. It has to share the same<br>
-	 * StringBuffer (buffer parameter) as this object in order to work
-	 * @param buffer the buffer that will be filled with the select
-	 */
-	public DeleteDeParser(ExpressionVisitor expressionVisitor, StringBuffer buffer) {
-		this.buffer = buffer;
-		this.expressionVisitor = expressionVisitor;
-	}
-	
-	public StringBuffer getBuffer() {
-		return buffer;
-	}
+    public DeleteDeParser() {
+    }
 
-	public void setBuffer(StringBuffer buffer) {
-		this.buffer = buffer;
-	}
+    /**
+     * @param expressionVisitor a {@link ExpressionVisitor} to de-parse expressions. It has to share the same<br>
+     * StringBuffer (buffer parameter) as this object in order to work
+     * @param buffer the buffer that will be filled with the select
+     */
+    public DeleteDeParser(ExpressionVisitor expressionVisitor, StringBuffer buffer) {
+        this.buffer = buffer;
+        this.expressionVisitor = expressionVisitor;
+    }
 
-	public void deParse(Delete delete) {
-		buffer.append("DELETE FROM " + delete.getTable().getWholeTableName());
-		if (delete.getWhere() != null) {
-			buffer.append(" WHERE ");
-			delete.getWhere().accept(expressionVisitor);
-		}
+    public StringBuffer getBuffer() {
+        return buffer;
+    }
 
-	}
-	public ExpressionVisitor getExpressionVisitor() {
-		return expressionVisitor;
-	}
+    public void setBuffer(StringBuffer buffer) {
+        this.buffer = buffer;
+    }
 
-	public void setExpressionVisitor(ExpressionVisitor visitor) {
-		expressionVisitor = visitor;
-	}
+    public void deParse(Delete delete) {
+        buffer.append("DELETE FROM " + delete.getTable().getWholeTableName());
+        if (delete.getWhere() != null) {
+            buffer.append(" WHERE ");
+            try {
+                delete.getWhere().accept(expressionVisitor);
+            } catch (Exception e) {
+            }
+        }
 
+    }
+
+    public ExpressionVisitor getExpressionVisitor() {
+        return expressionVisitor;
+    }
+
+    public void setExpressionVisitor(ExpressionVisitor visitor) {
+        expressionVisitor = visitor;
+    }
 }

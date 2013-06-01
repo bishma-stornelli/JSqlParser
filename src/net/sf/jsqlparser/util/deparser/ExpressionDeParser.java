@@ -97,14 +97,24 @@ public class ExpressionDeParser implements ExpressionVisitor, ItemsListVisitor {
     }
 
     public void visit(Between between) {
-        between.getLeftExpression().accept(this);
-        if (between.isNot())
+        try {
+            between.getLeftExpression().accept(this);
+        } catch (Exception e) {
+        }
+        if (between.isNot()) {
             buffer.append(" NOT");
+        }
 
         buffer.append(" BETWEEN ");
-        between.getBetweenExpressionStart().accept(this);
+        try {
+            between.getBetweenExpressionStart().accept(this);
+        } catch (Exception e) {
+        }
         buffer.append(" AND ");
-        between.getBetweenExpressionEnd().accept(this);
+        try {
+            between.getBetweenExpressionEnd().accept(this);
+        } catch (Exception e) {
+        }
 
     }
 
@@ -133,21 +143,34 @@ public class ExpressionDeParser implements ExpressionVisitor, ItemsListVisitor {
 
     public void visit(InExpression inExpression) {
 
-        inExpression.getLeftExpression().accept(this);
-        if (inExpression.isNot())
+        try {
+            inExpression.getLeftExpression().accept(this);
+        } catch (Exception e) {
+        }
+        if (inExpression.isNot()) {
             buffer.append(" NOT");
+        }
         buffer.append(" IN ");
 
-        inExpression.getItemsList().accept(this);
+        try {
+            inExpression.getItemsList().accept(this);
+        } catch (Exception e) {
+        }
     }
 
     public void visit(InverseExpression inverseExpression) {
         buffer.append("-");
-        inverseExpression.getExpression().accept(this);
+        try {
+            inverseExpression.getExpression().accept(this);
+        } catch (Exception e) {
+        }
     }
 
     public void visit(IsNullExpression isNullExpression) {
-        isNullExpression.getLeftExpression().accept(this);
+        try {
+            isNullExpression.getLeftExpression().accept(this);
+        } catch (Exception e) {
+        }
         if (isNullExpression.isNot()) {
             buffer.append(" IS NOT NULL");
         } else {
@@ -171,7 +194,10 @@ public class ExpressionDeParser implements ExpressionVisitor, ItemsListVisitor {
         } else {
             buffer.append(" EXISTS ");
         }
-        existsExpression.getRightExpression().accept(this);
+        try {
+            existsExpression.getRightExpression().accept(this);
+        } catch (Exception e) {
+        }
     }
 
     public void visit(LongValue longValue) {
@@ -210,11 +236,15 @@ public class ExpressionDeParser implements ExpressionVisitor, ItemsListVisitor {
     }
 
     public void visit(Parenthesis parenthesis) {
-    	if (parenthesis.isNot())
+        if (parenthesis.isNot()) {
             buffer.append(" NOT ");
-    		
+        }
+
         buffer.append("(");
-        parenthesis.getExpression().accept(this);
+        try {
+            parenthesis.getExpression().accept(this);
+        } catch (Exception e) {
+        }
         buffer.append(")");
 
     }
@@ -230,17 +260,27 @@ public class ExpressionDeParser implements ExpressionVisitor, ItemsListVisitor {
     }
 
     private void visitBinaryExpression(BinaryExpression binaryExpression, String operator) {
-        if (binaryExpression.isNot())
+        if (binaryExpression.isNot()) {
             buffer.append(" NOT ");
-        binaryExpression.getLeftExpression().accept(this);
+        }
+        try {
+            binaryExpression.getLeftExpression().accept(this);
+        } catch (Exception e) {
+        }
         buffer.append(operator);
-        binaryExpression.getRightExpression().accept(this);
+        try {
+            binaryExpression.getRightExpression().accept(this);
+        } catch (Exception e) {
+        }
 
     }
 
     public void visit(SubSelect subSelect) {
         buffer.append("(");
-        subSelect.getSelectBody().accept(selectVisitor);
+        try {
+            subSelect.getSelectBody().accept(selectVisitor);
+        } catch (Exception e) {
+        }
         buffer.append(")");
     }
 
@@ -264,15 +304,15 @@ public class ExpressionDeParser implements ExpressionVisitor, ItemsListVisitor {
         } else if (function.getParameters() == null) {
             buffer.append("()");
         } else {
-        	boolean oldUseBracketsInExprList = useBracketsInExprList;
+            boolean oldUseBracketsInExprList = useBracketsInExprList;
             if (function.isDistinct()) {
-            	useBracketsInExprList = false;
-        		buffer.append("(DISTINCT ");
+                useBracketsInExprList = false;
+                buffer.append("(DISTINCT ");
             }
             visit(function.getParameters());
             useBracketsInExprList = oldUseBracketsInExprList;
             if (function.isDistinct()) {
-        		buffer.append(")");
+                buffer.append(")");
             }
         }
 
@@ -283,18 +323,23 @@ public class ExpressionDeParser implements ExpressionVisitor, ItemsListVisitor {
     }
 
     public void visit(ExpressionList expressionList) {
-    	if (useBracketsInExprList)
-    		buffer.append("(");
+        if (useBracketsInExprList) {
+            buffer.append("(");
+        }
         for (Iterator iter = expressionList.getExpressions().iterator(); iter.hasNext();) {
             Expression expression = (Expression) iter.next();
-            expression.accept(this);
-            if (iter.hasNext())
+            try {
+                expression.accept(this);
+            } catch (Exception e) {
+            }
+            if (iter.hasNext()) {
                 buffer.append(", ");
+            }
         }
-    	if (useBracketsInExprList)
-    		buffer.append(")");
+        if (useBracketsInExprList) {
+            buffer.append(")");
+        }
     }
-
 
     public SelectVisitor getSelectVisitor() {
         return selectVisitor;
@@ -307,69 +352,91 @@ public class ExpressionDeParser implements ExpressionVisitor, ItemsListVisitor {
     public void visit(DateValue dateValue) {
         buffer.append("{d '" + dateValue.getValue().toString() + "'}");
     }
+
     public void visit(TimestampValue timestampValue) {
         buffer.append("{ts '" + timestampValue.getValue().toString() + "'}");
     }
+
     public void visit(TimeValue timeValue) {
         buffer.append("{t '" + timeValue.getValue().toString() + "'}");
     }
 
-	public void visit(CaseExpression caseExpression) {
-		buffer.append("CASE ");
-		Expression switchExp = caseExpression.getSwitchExpression();
-		if( switchExp != null ) {
-			switchExp.accept(this);
-		}
-		
-		List clauses = caseExpression.getWhenClauses();
-		for (Iterator iter = clauses.iterator(); iter.hasNext();) {
-			Expression exp = (Expression) iter.next();
-			exp.accept(this);
-		}
-		
-		Expression elseExp = caseExpression.getElseExpression();
-		if( elseExp != null ) {
-			elseExp.accept(this);
-		}
-		
-		buffer.append(" END");
-	}
+    public void visit(CaseExpression caseExpression) {
+        buffer.append("CASE ");
+        Expression switchExp = caseExpression.getSwitchExpression();
+        if (switchExp != null) {
+            try {
+                switchExp.accept(this);
+            } catch (Exception e) {
+            }
+        }
 
-	public void visit(WhenClause whenClause) {
-		buffer.append(" WHEN ");
-		whenClause.getWhenExpression().accept(this);
-		buffer.append(" THEN ");
-		whenClause.getThenExpression().accept(this);
-	}
+        List clauses = caseExpression.getWhenClauses();
+        for (Iterator iter = clauses.iterator(); iter.hasNext();) {
+            Expression exp = (Expression) iter.next();
+            try {
+                exp.accept(this);
+            } catch (Exception e) {
+            }
+        }
 
-	public void visit(AllComparisonExpression allComparisonExpression) {
-		buffer.append(" ALL ");
-		allComparisonExpression.GetSubSelect().accept((ExpressionVisitor)this);
-	}
+        Expression elseExp = caseExpression.getElseExpression();
+        if (elseExp != null) {
+            try {
+                elseExp.accept(this);
+            } catch (Exception e) {
+            }
+        }
 
-	public void visit(AnyComparisonExpression anyComparisonExpression) {
-		buffer.append(" ANY ");
-		anyComparisonExpression.GetSubSelect().accept((ExpressionVisitor)this);
-	}
+        buffer.append(" END");
+    }
 
-	public void visit(Concat concat) {
+    public void visit(WhenClause whenClause) {
+        buffer.append(" WHEN ");
+        try {
+            whenClause.getWhenExpression().accept(this);
+        } catch (Exception e) {
+        }
+        buffer.append(" THEN ");
+        try {
+            whenClause.getThenExpression().accept(this);
+        } catch (Exception e) {
+        }
+    }
+
+    public void visit(AllComparisonExpression allComparisonExpression) {
+        buffer.append(" ALL ");
+        try {
+            allComparisonExpression.GetSubSelect().accept((ExpressionVisitor) this);
+        } catch (Exception e) {
+        }
+    }
+
+    public void visit(AnyComparisonExpression anyComparisonExpression) {
+        buffer.append(" ANY ");
+        try {
+            anyComparisonExpression.GetSubSelect().accept((ExpressionVisitor) this);
+        } catch (Exception e) {
+        }
+    }
+
+    public void visit(Concat concat) {
         visitBinaryExpression(concat, " || ");
-	}
+    }
 
-	public void visit(Matches matches) {
+    public void visit(Matches matches) {
         visitBinaryExpression(matches, " @@ ");
-	}
+    }
 
-	public void visit(BitwiseAnd bitwiseAnd) {
+    public void visit(BitwiseAnd bitwiseAnd) {
         visitBinaryExpression(bitwiseAnd, " & ");
-	}
+    }
 
-	public void visit(BitwiseOr bitwiseOr) {
+    public void visit(BitwiseOr bitwiseOr) {
         visitBinaryExpression(bitwiseOr, " | ");
-	}
+    }
 
-	public void visit(BitwiseXor bitwiseXor) {
+    public void visit(BitwiseXor bitwiseXor) {
         visitBinaryExpression(bitwiseXor, " ^ ");
-	}
-
+    }
 }

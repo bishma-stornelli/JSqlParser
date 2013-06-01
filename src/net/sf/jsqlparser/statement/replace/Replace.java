@@ -41,7 +41,7 @@ public class Replace implements Statement {
 	private List expressions;
 	private boolean useValues = true;
 
-	public void accept(StatementVisitor statementVisitor) {
+	public void accept(StatementVisitor statementVisitor) throws Exception {
 		statementVisitor.visit(this);
 	}
 

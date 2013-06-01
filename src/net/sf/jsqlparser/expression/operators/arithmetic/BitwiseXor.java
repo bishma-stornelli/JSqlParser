@@ -28,7 +28,7 @@ import net.sf.jsqlparser.expression.ExpressionVisitor;
 
 public class BitwiseXor extends BinaryExpression {
 	
-	public void accept(ExpressionVisitor expressionVisitor) {
+	public void accept(ExpressionVisitor expressionVisitor) throws Exception {
 		expressionVisitor.visit(this);
 	}
 	

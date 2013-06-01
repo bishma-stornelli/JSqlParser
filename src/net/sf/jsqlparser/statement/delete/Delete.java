@@ -31,7 +31,7 @@ public class Delete implements Statement {
 	private Table table;
 	private Expression where;
 	
-	public void accept(StatementVisitor statementVisitor) {
+	public void accept(StatementVisitor statementVisitor) throws Exception {
 		statementVisitor.visit(this);
 	}
 

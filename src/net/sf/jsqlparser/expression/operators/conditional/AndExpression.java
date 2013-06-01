@@ -32,7 +32,7 @@ public class AndExpression extends BinaryExpression {
 		setLeftExpression(leftExpression);
 		setRightExpression(rightExpression);
 	}
-	public void accept(ExpressionVisitor expressionVisitor) {
+	public void accept(ExpressionVisitor expressionVisitor) throws Exception {
 		expressionVisitor.visit(this);
 	}
 	
