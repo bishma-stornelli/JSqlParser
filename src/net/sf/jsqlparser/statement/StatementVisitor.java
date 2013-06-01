@@ -3,7 +3,7 @@
  * ================================================================
  *
  * Project Info:  http://jsqlparser.sourceforge.net
- * Project Lead:  Leonardo Francalanci (leoonardoo@yahoo.it);
+ * Project Lead:  Leonardo Francalanci (leoonardoo@yahoo.it) throws Exception;
  *
  * (C) Copyright 2004, by Leonardo Francalanci
  *
@@ -32,13 +32,13 @@ import net.sf.jsqlparser.statement.truncate.Truncate;
 import net.sf.jsqlparser.statement.update.Update;
 
 public interface StatementVisitor {
-	public void visit(Select select);
-	public void visit(Delete delete);
-	public void visit(Update update);
-	public void visit(Insert insert);
-	public void visit(Replace replace);
-	public void visit(Drop drop);
-	public void visit(Truncate truncate);
-	public void visit(CreateTable createTable);
+	public void visit(Select select) throws Exception;
+	public void visit(Delete delete) throws Exception;
+	public void visit(Update update) throws Exception;
+	public void visit(Insert insert) throws Exception;
+	public void visit(Replace replace) throws Exception;
+	public void visit(Drop drop) throws Exception;
+	public void visit(Truncate truncate) throws Exception;
+	public void visit(CreateTable createTable) throws Exception;
 
 }
