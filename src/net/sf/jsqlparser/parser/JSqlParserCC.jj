@@ -188,12 +188,13 @@ TOKEN: /* SQL Keywords. prefixed with K_ to avoid name clashes */
 |   <K_UNION:"UNION">
 |   <K_GROUP:"GROUP">
 |   <K_BEGIN:"BEGIN">
-|   <K_INDEX: "INDEX">
+|   <K_INDEX:"INDEX">
 |   <K_INNER:"INNER">
 |   <K_LIMIT:"LIMIT">
 |   <K_OUTER:"OUTER">
 |   <K_ORDER:"ORDER">
 |   <K_RIGHT:"RIGHT">
+|   <K_START:"START">
 |   <K_DELETE:"DELETE">
 |   <K_CREATE:"CREATE">
 |   <K_SELECT:"SELECT">
@@ -840,7 +841,7 @@ OrderByElement OrderByElement():
 	Expression columnReference = null, fuzzyStart = null;
 }
 {
-    LOOKAHEAD(2)
+    LOOKAHEAD(1)
     column = Column()
     <K_STARTING> <K_FROM>
     fuzzyStart = PrimaryExpression()
@@ -856,6 +857,23 @@ OrderByElement OrderByElement():
     {
     orderByElement.setExpression(columnReference);
             return orderByElement;
+    }
+|
+    LOOKAHEAD(3)
+    <K_SIMILARITY> <K_ON> column = Column()
+    <K_START> fuzzyStart = PrimaryExpression()
+    {
+        orderByElement.setExpression(column);
+        orderByElement.setFuzzyStart(fuzzyStart);
+        return orderByElement;
+    }
+|
+    <K_SIMILARITY> <K_ON> column = Column()
+    <K_STARTING> fuzzyStart = PrimaryExpression()
+    {
+        orderByElement.setExpression(column);
+        orderByElement.setFuzzyStart(fuzzyStart);
+        return orderByElement;
     }
 }
 

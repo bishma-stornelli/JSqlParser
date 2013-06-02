@@ -71,4 +71,16 @@
     nbproject/build-impl.xml file. 
 
     -->
+
+    <target name="parser">
+        <delete file="src/net/sf/jsqlparser/parser/TokenMgrError.java"/>
+        <delete file="src/net/sf/jsqlparser/parser/ParseException.java"/>
+        <delete file="src/net/sf/jsqlparser/parser/Token.java"/>
+        <delete file="src/net/sf/jsqlparser/parser/SimpleCharStream.java"/>
+        <javacc
+            target="src/net/sf/jsqlparser/parser/JSqlParserCC.jj"
+            outputdirectory="src/net/sf/jsqlparser/parser"
+            javacchome="/usr/share/java"
+        />
+    </target>
 </project>
