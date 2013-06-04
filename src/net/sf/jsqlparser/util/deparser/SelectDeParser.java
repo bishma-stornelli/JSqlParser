@@ -284,9 +284,14 @@ public class SelectDeParser implements SelectVisitor, OrderByVisitor, SelectItem
     }
 
     public void deparseJoin(Join join) {
+        
         if (join.isSimple()) {
             buffer.append(", ");
         } else {
+            
+            if (buffer.charAt(buffer.length() - 1) != ' ') {
+                buffer.append(" ");
+            }
 
             if (join.isRight()) {
                 buffer.append("RIGHT ");
