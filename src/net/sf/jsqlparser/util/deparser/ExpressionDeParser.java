@@ -17,6 +17,7 @@ import net.sf.jsqlparser.expression.JdbcParameter;
 import net.sf.jsqlparser.expression.LongValue;
 import net.sf.jsqlparser.expression.NullValue;
 import net.sf.jsqlparser.expression.Parenthesis;
+import net.sf.jsqlparser.expression.SimilarColumn;
 import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.TimeValue;
 import net.sf.jsqlparser.expression.TimestampValue;
@@ -438,5 +439,9 @@ public class ExpressionDeParser implements ExpressionVisitor, ItemsListVisitor {
 
     public void visit(BitwiseXor bitwiseXor) {
         visitBinaryExpression(bitwiseXor, " ^ ");
+    }
+
+    public void visit(SimilarColumn similarColumn) {
+        buffer.append(similarColumn.toString());
     }
 }
