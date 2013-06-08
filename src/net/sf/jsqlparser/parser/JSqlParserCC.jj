@@ -841,7 +841,7 @@ OrderByElement OrderByElement():
 	Expression columnReference = null, fuzzyStart = null;
 }
 {
-    LOOKAHEAD(1)
+    LOOKAHEAD(2)
     column = Column()
     <K_STARTING> <K_FROM>
     fuzzyStart = PrimaryExpression()
@@ -859,22 +859,22 @@ OrderByElement OrderByElement():
             return orderByElement;
     }
 |
-    LOOKAHEAD(3)
     <K_SIMILARITY> <K_ON> column = Column()
-    <K_START> fuzzyStart = PrimaryExpression()
-    {
-        orderByElement.setExpression(column);
-        orderByElement.setFuzzyStart(fuzzyStart);
-        return orderByElement;
-    }
-|
-    <K_SIMILARITY> <K_ON> column = Column()
-    <K_STARTING> fuzzyStart = PrimaryExpression()
-    {
-        orderByElement.setExpression(column);
-        orderByElement.setFuzzyStart(fuzzyStart);
-        return orderByElement;
-    }
+    (
+        <K_START> fuzzyStart = PrimaryExpression()
+        {
+            orderByElement.setExpression(column);
+            orderByElement.setFuzzyStart(fuzzyStart);
+            return orderByElement;
+        }
+    |
+        <K_STARTING> fuzzyStart = PrimaryExpression()
+        {
+            orderByElement.setExpression(column);
+            orderByElement.setFuzzyStart(fuzzyStart);
+            return orderByElement;
+        }
+    )
 }
 
 Limit Limit():
