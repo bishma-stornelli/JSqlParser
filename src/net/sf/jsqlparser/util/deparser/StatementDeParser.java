@@ -3,6 +3,7 @@ package net.sf.jsqlparser.util.deparser;
 import java.util.Iterator;
 
 import net.sf.jsqlparser.statement.StatementVisitor;
+import net.sf.jsqlparser.statement.alter.fuzzy.domain.AlterFuzzyDomain;
 import net.sf.jsqlparser.statement.create.fuzzy.domain.CreateFuzzyDomain;
 import net.sf.jsqlparser.statement.create.table.CreateTable;
 import net.sf.jsqlparser.statement.delete.Delete;
@@ -30,6 +31,11 @@ public class StatementDeParser implements StatementVisitor {
     public void visit(CreateFuzzyDomain createFuzzyDomain) {
         CreateFuzzyDomainDeParser createFuzzyDomainDeParser = new CreateFuzzyDomainDeParser(buffer);
         createFuzzyDomainDeParser.deParse(createFuzzyDomain);
+    }
+
+    public void visit(AlterFuzzyDomain alterFuzzyDomain) {
+        AlterFuzzyDomainDeParser alterFuzzyDomainDeParser = new AlterFuzzyDomainDeParser(buffer);
+        alterFuzzyDomainDeParser.deParse(alterFuzzyDomain);
     }
 
     public void visit(Delete delete) {

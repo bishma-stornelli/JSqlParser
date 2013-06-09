@@ -1,8 +1,7 @@
 package net.sf.jsqlparser.util.deparser;
 
-import java.util.List;
-import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.Similarity;
+import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.statement.create.fuzzy.domain.CreateFuzzyDomain;
 
 /**
@@ -29,20 +28,15 @@ public class CreateFuzzyDomainDeParser {
             createFuzzyDomain.getValues().accept(expressionDeParser);
         } catch (Exception e) {
         }
-        boolean first = true;
-        List<Similarity> similarityList = createFuzzyDomain.getSimilarities();
-        if (similarityList.size() > 0) {
-            buffer.append(" {");
-            for (Similarity s : similarityList) {
-                if (!first) {
-                    buffer.append(", ");
-                }
-                try {
-                    s.accept(expressionDeParser);
-                } catch (Exception e) {
-                }
+        if (createFuzzyDomain.getSimilarities().getExpressions().size() > 0) {
+            expressionDeParser.setUseBracketsInExprList(false);
+            buffer.append(" SIMILARITY {");
+            try {
+                createFuzzyDomain.getSimilarities().accept(expressionDeParser);
+            } catch (Exception e) {
             }
             buffer.append("}");
+            expressionDeParser.setUseBracketsInExprList(true);
         }
     }
 

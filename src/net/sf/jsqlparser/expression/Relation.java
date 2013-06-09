@@ -24,28 +24,33 @@ package net.sf.jsqlparser.expression;
 /**
  * A string as in 'example_string'
  */
-public class Similarity extends Relation {
+public class Relation implements Expression {
 
-    private DoubleValue value;
+    private Expression label1;
+    private Expression label2;
 
-    public Similarity(Expression label1, Expression label2, DoubleValue value) {
-        super(label1, label2);
-        this.value = value;
+    public Relation(Expression label1, Expression label2) {
+        this.label1 = label1;
+        this.label2 = label2;
     }
 
-    public DoubleValue getValue() {
-        return value;
+    public Expression getLabel1() {
+        return label1;
     }
 
-    public void setValue(DoubleValue value) {
-        this.value = value;
+    public void setLabel1(Expression label1) {
+        this.label1 = label1;
+    }
+
+    public Expression getLabel2() {
+        return label2;
+    }
+
+    public void setLabel2(Expression label2) {
+        this.label2 = label2;
     }
 
     public void accept(ExpressionVisitor expressionVisitor) throws Exception {
         expressionVisitor.visit(this);
-    }
-
-    public String toString() {
-        return super.toString() + " / " + value;
     }
 }

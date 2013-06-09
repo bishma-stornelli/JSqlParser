@@ -14,10 +14,10 @@ public class CreateFuzzyDomain implements Statement {
 
     private String name;
     private ExpressionList values;
-    private List<Similarity> similarityList;
+    private ExpressionList similarityList;
 
     public CreateFuzzyDomain(String name, ExpressionList values,
-            List<Similarity> similarityList) {
+            ExpressionList similarityList) {
         this.name = name;
         this.values = values;
         this.similarityList = similarityList;
@@ -50,15 +50,19 @@ public class CreateFuzzyDomain implements Statement {
         this.values = values;
     }
 
-    public List<Similarity> getSimilarities() {
+    public ExpressionList getSimilarities() {
         return similarityList;
     }
 
-    public void setSimilarities(List<Similarity> similarityList) {
+    public void setSimilarities(ExpressionList similarityList) {
         this.similarityList = similarityList;
     }
 
     public String toString() {
-        return "CREATE FUZZY DOMAIN " + name + " (" + values.toString() + ") ";
+        String sql = "CREATE FUZZY DOMAIN " + name + " " + values.toString();
+        if (similarityList.getExpressions().size() > 0) {
+            sql += " SIMILARITY {" + similarityList.toString(false) + "}";
+        }
+        return sql;
     }
 }

@@ -17,6 +17,7 @@ import net.sf.jsqlparser.expression.JdbcParameter;
 import net.sf.jsqlparser.expression.LongValue;
 import net.sf.jsqlparser.expression.NullValue;
 import net.sf.jsqlparser.expression.Parenthesis;
+import net.sf.jsqlparser.expression.Relation;
 import net.sf.jsqlparser.expression.SimilarColumn;
 import net.sf.jsqlparser.expression.Similarity;
 import net.sf.jsqlparser.expression.StringValue;
@@ -62,6 +63,14 @@ public class ExpressionDeParser implements ExpressionVisitor, ItemsListVisitor {
     protected boolean useBracketsInExprList = true;
 
     public ExpressionDeParser() {
+    }
+
+    public void setUseBracketsInExprList(boolean useBracketsInExprList) {
+        this.useBracketsInExprList = useBracketsInExprList;
+    }
+
+    public boolean getUseBracketsInExprList() {
+        return this.useBracketsInExprList;
     }
 
     /**
@@ -448,6 +457,18 @@ public class ExpressionDeParser implements ExpressionVisitor, ItemsListVisitor {
         try{
             similarColumn.getColumn().accept(this);
         }catch(Exception e) {}
+    }
+
+    public void visit(Relation relation) {
+        buffer.append("(");
+        try{
+            relation.getLabel1().accept(this);
+        }catch(Exception e) {}
+        buffer.append(",");
+        try{
+            relation.getLabel2().accept(this);
+        }catch(Exception e) {}
+        buffer.append(")");
     }
 
     public void visit(Similarity similarity) {

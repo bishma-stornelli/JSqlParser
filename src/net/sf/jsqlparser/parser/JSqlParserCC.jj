@@ -76,6 +76,7 @@ import net.sf.jsqlparser.expression.AnyComparisonExpression;
 import net.sf.jsqlparser.expression.AllComparisonExpression;
 import net.sf.jsqlparser.expression.SimilarColumn;
 import net.sf.jsqlparser.expression.Similarity;
+import net.sf.jsqlparser.expression.Relation;
 import net.sf.jsqlparser.expression.operators.arithmetic.Addition;
 import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseAnd;
 import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseOr;
@@ -108,6 +109,7 @@ import net.sf.jsqlparser.statement.create.table.ColumnDefinition;
 import net.sf.jsqlparser.statement.create.table.CreateTable;
 import net.sf.jsqlparser.statement.create.table.Index;
 import net.sf.jsqlparser.statement.create.fuzzy.domain.CreateFuzzyDomain;
+import net.sf.jsqlparser.statement.alter.fuzzy.domain.AlterFuzzyDomain;
 import net.sf.jsqlparser.statement.delete.Delete;
 import net.sf.jsqlparser.statement.drop.Drop;
 import net.sf.jsqlparser.statement.insert.Insert;
@@ -160,15 +162,16 @@ TOKEN: /* SQL Keywords. prefixed with K_ to avoid name clashes */
 |   <K_IN:"IN">
 |   <K_OR:"OR">
 |   <K_ON:"ON">
-|   <K_ALL: "ALL">
-|   <K_AND: "AND">
-|   <K_ANY: "ANY">
-|   <K_KEY: "KEY">
+|   <K_ALL:"ALL">
+|   <K_AND:"AND">
+|   <K_ANY:"ANY">
+|   <K_KEY:"KEY">
 |   <K_NOT:"NOT">
 |   <K_SET:"SET">
 |   <K_ASC:"ASC">
 |   <K_TOP:"TOP">
 |   <K_END:"END">
+|   <K_ADD:"ADD">
 |   <K_DESC:"DESC">
 |   <K_INTO:"INTO">
 |   <K_NULL:"NULL">
@@ -199,6 +202,7 @@ TOKEN: /* SQL Keywords. prefixed with K_ to avoid name clashes */
 |   <K_RIGHT:"RIGHT">
 |   <K_START:"START">
 |   <K_FUZZY:"FUZZY">
+|   <K_ALTER:"ALTER">
 |   <K_DELETE:"DELETE">
 |   <K_CREATE:"CREATE">
 |   <K_SELECT:"SELECT">
@@ -274,6 +278,8 @@ Statement Statement() :
     stm = CreateFuzzyDomain()
     |
     stm = CreateTable()
+    |
+    stm = AlterFuzzyDomain()
     |
     stm = Drop()
     |
@@ -1715,7 +1721,7 @@ CreateFuzzyDomain CreateFuzzyDomain():
 
     {  return new CreateFuzzyDomain(domain.image,
                                     new ExpressionList(expressionList),
-                                    similarityList);   }
+                                    new ExpressionList(similarityList));   }
 }
 Similarity Similarity():
 {
@@ -1727,6 +1733,61 @@ Similarity Similarity():
     "(" label1=PrimaryExpression() "," label2=PrimaryExpression() ")"
         "/" [ "+" | "-" { tmp = "-"; }] token=<S_DOUBLE>
     { return new Similarity(label1, label2, new DoubleValue(tmp+token.image)); }
+}
+
+AlterFuzzyDomain AlterFuzzyDomain():
+{
+    Token domain;
+    Expression expression;
+    Similarity similarity;
+    Relation relation;
+    ArrayList<Expression> expressionList = new ArrayList<Expression>();
+    ArrayList<Similarity> similarityList = new ArrayList<Similarity>();
+    ArrayList<Relation> relationList = new ArrayList<Relation>();
+    AlterFuzzyDomain alterFuzzyDomain;
+}
+{
+    <K_ALTER> <K_FUZZY> <K_DOMAIN> domain=<S_IDENTIFIER>
+    { alterFuzzyDomain = new AlterFuzzyDomain(domain.image); }
+    (
+        <K_ADD>
+        (
+            <K_VALUES>
+            "("
+                expression=PrimaryExpression() {expressionList.add(expression);}
+                    ("," expression=PrimaryExpression() {expressionList.add(expression);})*
+            ")"
+            {alterFuzzyDomain.setAddValues(new ExpressionList(expressionList));}
+        |
+            <K_SIMILARITY> "{" similarity=Similarity() {similarityList.add(similarity); }
+                    ("," similarity=Similarity() {similarityList.add(similarity);} )* "}"
+            {alterFuzzyDomain.setAddSimilarity(new ExpressionList(similarityList));}
+        )
+    |
+        <K_DROP>
+        (
+            <K_VALUES>
+            "("
+                expression=PrimaryExpression() {expressionList.add(expression);}
+                    ("," expression=PrimaryExpression() {expressionList.add(expression);})*
+            ")"
+            {alterFuzzyDomain.setDropValues(new ExpressionList(expressionList));}
+        |
+            <K_SIMILARITY> "{" relation=Relation() {relationList.add(relation); }
+                    ("," relation=Relation() {relationList.add(relation);} )* "}"
+            {alterFuzzyDomain.setDropSimilarity(new ExpressionList(relationList));}
+        )
+    )
+    { return alterFuzzyDomain; }
+}
+
+Relation Relation():
+{
+    Expression label1, label2;
+}
+{
+    "(" label1=PrimaryExpression() "," label2=PrimaryExpression() ")"
+    { return new Relation(label1, label2); }
 }
 
 ColDataType ColDataType():

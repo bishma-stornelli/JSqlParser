@@ -54,4 +54,8 @@ public class ExpressionList implements ItemsList {
 	public String toString() {
 		return PlainSelect.getStringList(expressions, true, true);
 	}
+
+	public String toString(boolean useBrackets) {
+		return PlainSelect.getStringList(expressions, true, useBrackets);
+	}
 }
