@@ -74,6 +74,7 @@ import net.sf.jsqlparser.expression.CaseExpression;
 import net.sf.jsqlparser.expression.WhenClause;
 import net.sf.jsqlparser.expression.AnyComparisonExpression;
 import net.sf.jsqlparser.expression.AllComparisonExpression;
+import net.sf.jsqlparser.expression.SimilarColumn;
 import net.sf.jsqlparser.expression.operators.arithmetic.Addition;
 import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseAnd;
 import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseOr;
@@ -210,6 +211,7 @@ TOKEN: /* SQL Keywords. prefixed with K_ to avoid name clashes */
 |   <K_REPLACE:"REPLACE">
 |   <K_BETWEEN:"BETWEEN">
 |   <K_FOREIGN:"FOREIGN">
+|   <K_SIMILAR:"SIMILAR">
 |   <K_TRUNCATE:"TRUNCATE">
 |   <K_DISTINCT:"DISTINCT">
 |   <K_STARTING:"STARTING">
@@ -802,11 +804,22 @@ List GroupByColumnReferences():
 	List columnReferences = new ArrayList();
 }
 {
-    <K_GROUP> <K_BY> columnReference=SimpleExpression() {columnReferences.add(columnReference); }
-    ("," columnReference=SimpleExpression()  {columnReferences.add(columnReference); } )*
+    <K_GROUP> <K_BY> columnReference=GroupByColumnReference() {columnReferences.add(columnReference); }
+    ("," columnReference=GroupByColumnReference()  {columnReferences.add(columnReference); } )*
 	{
 		return columnReferences;
 	}
+}
+
+Expression GroupByColumnReference():
+{
+    Expression columnReference = null;
+    Column column = null;
+}
+{
+    <K_SIMILAR> column=Column() { return new SimilarColumn(column); }
+|
+    columnReference=SimpleExpression() { return columnReference; }
 }
 
 Expression Having():
@@ -1386,6 +1399,7 @@ Expression PrimaryExpression():
 	Token token = null;
 	boolean isInverse = false;
 	String tmp = "";
+        Column column = new Column();
 }
 {
 

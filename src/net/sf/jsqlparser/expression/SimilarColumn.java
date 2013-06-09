@@ -30,6 +30,10 @@ public class SimilarColumn implements Expression {
 
     private Column column;
 
+    public SimilarColumn(Column column) {
+        this.column = column;
+    };
+
     public void accept(ExpressionVisitor expressionVisitor) throws Exception {
         expressionVisitor.visit(this);
     }
