@@ -124,71 +124,75 @@ public interface CCJSqlParserConstants {
   /** RegularExpression Id. */
   int K_START = 49;
   /** RegularExpression Id. */
-  int K_DELETE = 50;
+  int K_FUZZY = 50;
   /** RegularExpression Id. */
-  int K_CREATE = 51;
+  int K_DELETE = 51;
   /** RegularExpression Id. */
-  int K_SELECT = 52;
+  int K_CREATE = 52;
   /** RegularExpression Id. */
-  int K_OFFSET = 53;
+  int K_SELECT = 53;
   /** RegularExpression Id. */
-  int K_EXISTS = 54;
+  int K_OFFSET = 54;
   /** RegularExpression Id. */
-  int K_HAVING = 55;
+  int K_EXISTS = 55;
   /** RegularExpression Id. */
-  int K_INSERT = 56;
+  int K_HAVING = 56;
   /** RegularExpression Id. */
-  int K_UPDATE = 57;
+  int K_INSERT = 57;
   /** RegularExpression Id. */
-  int K_VALUES = 58;
+  int K_UPDATE = 58;
   /** RegularExpression Id. */
-  int K_ESCAPE = 59;
+  int K_VALUES = 59;
   /** RegularExpression Id. */
-  int K_PRIMARY = 60;
+  int K_ESCAPE = 60;
   /** RegularExpression Id. */
-  int K_NATURAL = 61;
+  int K_DOMAIN = 61;
   /** RegularExpression Id. */
-  int K_REPLACE = 62;
+  int K_PRIMARY = 62;
   /** RegularExpression Id. */
-  int K_BETWEEN = 63;
+  int K_NATURAL = 63;
   /** RegularExpression Id. */
-  int K_FOREIGN = 64;
+  int K_REPLACE = 64;
   /** RegularExpression Id. */
-  int K_SIMILAR = 65;
+  int K_BETWEEN = 65;
   /** RegularExpression Id. */
-  int K_TRUNCATE = 66;
+  int K_FOREIGN = 66;
   /** RegularExpression Id. */
-  int K_DISTINCT = 67;
+  int K_SIMILAR = 67;
   /** RegularExpression Id. */
-  int K_STARTING = 68;
+  int K_TRUNCATE = 68;
   /** RegularExpression Id. */
-  int K_INTERSECT = 69;
+  int K_DISTINCT = 69;
   /** RegularExpression Id. */
-  int K_CONSTRAINT = 70;
+  int K_STARTING = 70;
   /** RegularExpression Id. */
-  int K_REFERENCES = 71;
+  int K_INTERSECT = 71;
   /** RegularExpression Id. */
-  int K_SIMILARITY = 72;
+  int K_CONSTRAINT = 72;
   /** RegularExpression Id. */
-  int S_DOUBLE = 73;
+  int K_REFERENCES = 73;
   /** RegularExpression Id. */
-  int S_INTEGER = 74;
+  int K_SIMILARITY = 74;
   /** RegularExpression Id. */
-  int DIGIT = 75;
+  int S_DOUBLE = 75;
   /** RegularExpression Id. */
-  int LINE_COMMENT = 76;
+  int S_INTEGER = 76;
   /** RegularExpression Id. */
-  int MULTI_LINE_COMMENT = 77;
+  int DIGIT = 77;
   /** RegularExpression Id. */
-  int S_IDENTIFIER = 78;
+  int LINE_COMMENT = 78;
   /** RegularExpression Id. */
-  int LETTER = 79;
+  int MULTI_LINE_COMMENT = 79;
   /** RegularExpression Id. */
-  int SPECIAL_CHARS = 80;
+  int S_IDENTIFIER = 80;
   /** RegularExpression Id. */
-  int S_CHAR_LITERAL = 81;
+  int LETTER = 81;
   /** RegularExpression Id. */
-  int S_QUOTED_IDENTIFIER = 82;
+  int SPECIAL_CHARS = 82;
+  /** RegularExpression Id. */
+  int S_CHAR_LITERAL = 83;
+  /** RegularExpression Id. */
+  int S_QUOTED_IDENTIFIER = 84;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -245,6 +249,7 @@ public interface CCJSqlParserConstants {
     "\"ORDER\"",
     "\"RIGHT\"",
     "\"START\"",
+    "\"FUZZY\"",
     "\"DELETE\"",
     "\"CREATE\"",
     "\"SELECT\"",
@@ -255,6 +260,7 @@ public interface CCJSqlParserConstants {
     "\"UPDATE\"",
     "\"VALUES\"",
     "\"ESCAPE\"",
+    "\"DOMAIN\"",
     "\"PRIMARY\"",
     "\"NATURAL\"",
     "\"REPLACE\"",

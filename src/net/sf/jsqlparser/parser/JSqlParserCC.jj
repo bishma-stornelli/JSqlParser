@@ -106,6 +106,7 @@ import net.sf.jsqlparser.statement.create.table.ColDataType;
 import net.sf.jsqlparser.statement.create.table.ColumnDefinition;
 import net.sf.jsqlparser.statement.create.table.CreateTable;
 import net.sf.jsqlparser.statement.create.table.Index;
+import net.sf.jsqlparser.statement.create.fuzzy.domain.CreateFuzzyDomain;
 import net.sf.jsqlparser.statement.delete.Delete;
 import net.sf.jsqlparser.statement.drop.Drop;
 import net.sf.jsqlparser.statement.insert.Insert;
@@ -196,6 +197,7 @@ TOKEN: /* SQL Keywords. prefixed with K_ to avoid name clashes */
 |   <K_ORDER:"ORDER">
 |   <K_RIGHT:"RIGHT">
 |   <K_START:"START">
+|   <K_FUZZY:"FUZZY">
 |   <K_DELETE:"DELETE">
 |   <K_CREATE:"CREATE">
 |   <K_SELECT:"SELECT">
@@ -206,6 +208,7 @@ TOKEN: /* SQL Keywords. prefixed with K_ to avoid name clashes */
 |   <K_UPDATE:"UPDATE">
 |   <K_VALUES:"VALUES">
 |   <K_ESCAPE:"ESCAPE">
+|   <K_DOMAIN:"DOMAIN">
 |   <K_PRIMARY:"PRIMARY">
 |   <K_NATURAL:"NATURAL">
 |   <K_REPLACE:"REPLACE">
@@ -265,6 +268,9 @@ Statement Statement() :
     stm = Delete()
     |
     stm =  Replace()
+    |
+    LOOKAHEAD(<K_CREATE> <K_FUZZY>)
+    stm = CreateFuzzyDomain()
     |
     stm = CreateTable()
     |
@@ -1561,7 +1567,7 @@ CreateTable CreateTable():
 	String parameter = null;
 }
 {
-	<K_CREATE> 
+        <K_CREATE>
 	// TODO:
 //	[ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } ] 
 	(CreateParameter())*
@@ -1687,6 +1693,21 @@ CreateTable CreateTable():
 	}
 	
 }
+
+CreateFuzzyDomain CreateFuzzyDomain():
+{
+    Token domain = null;
+    Expression value = null;
+    ArrayList<Expression> list = new ArrayList<Expression>();
+}
+{
+    <K_CREATE> <K_FUZZY> <K_DOMAIN> domain=<S_IDENTIFIER> <K_AS> <K_VALUES> "("
+        value=PrimaryExpression() {list.add(value);}
+            ("," value=PrimaryExpression() {list.add(value);})* ")"
+    {  return new CreateFuzzyDomain(domain.image, new ExpressionList(list));   }
+}
+
+//CREATE FUZZY DOMAIN <name> AS VALUES (<label >[,<label>,…,<label>]) [SIMILARITY { (<label>,<label>) / <value> [,(<label>,<label>) / <value>,…, (<label>,<label>) / <value> ] } ]
 
 ColDataType ColDataType():
 {
