@@ -1876,7 +1876,7 @@ List ColumnsNamesList():
 Drop Drop():
 {
 	Drop drop = new Drop();
-	Token tk = null;
+	Token tk = null, tk2 = null;
 	List dropArgs = new ArrayList();
 }
 {
@@ -1887,8 +1887,10 @@ Drop Drop():
 		tk=<K_TABLE>
 		|
 		tk=<K_INDEX>
+		|
+		tk=<K_FUZZY> tk2=<K_DOMAIN>
 	)
-    { drop.setType(tk.image); }
+    { drop.setType(tk.image + (null != tk2 ? " " + tk2.image : "")); }
 	tk=<S_IDENTIFIER> { drop.setName(tk.image); }
 	(tk=<S_IDENTIFIER> { dropArgs.add(tk.image); })*
 	
