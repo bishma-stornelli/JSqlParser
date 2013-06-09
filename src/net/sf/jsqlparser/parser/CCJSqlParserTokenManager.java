@@ -43,6 +43,7 @@ import net.sf.jsqlparser.expression.WhenClause;
 import net.sf.jsqlparser.expression.AnyComparisonExpression;
 import net.sf.jsqlparser.expression.AllComparisonExpression;
 import net.sf.jsqlparser.expression.SimilarColumn;
+import net.sf.jsqlparser.expression.Similarity;
 import net.sf.jsqlparser.expression.operators.arithmetic.Addition;
 import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseAnd;
 import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseOr;
@@ -331,6 +332,7 @@ private int jjMoveStringLiteralDfa0_0()
       case 119:
          return jjMoveStringLiteralDfa1_0(0x5080000000L, 0x0L);
       case 123:
+         jjmatchedKind = 112;
          return jjMoveStringLiteralDfa1_0(0x0L, 0xe80000000000L);
       case 124:
          jjmatchedKind = 101;
@@ -1312,14 +1314,14 @@ null, null, null, null, null, null, null, null, null, null, null, null, null, nu
 null, null, null, null, null, null, null, null, null, null, null, null, null, null, 
 null, null, "\73", "\75", "\54", "\50", "\51", "\56", "\52", "\77", "\76", "\74", 
 "\76\75", "\74\75", "\74\76", "\41\75", "\100\100", "\174\174", "\174", "\46", "\53", 
-"\55", "\57", "\136", null, "\175", null, null, null, };
+"\55", "\57", "\136", null, "\175", null, null, null, "\173", };
 
 /** Lexer state names. */
 public static final String[] lexStateNames = {
    "DEFAULT",
 };
 static final long[] jjtoToken = {
-   0xffffffffffffffe1L, 0xfffffff91fffL, 
+   0xffffffffffffffe1L, 0x1fffffff91fffL, 
 };
 static final long[] jjtoSkip = {
    0x1eL, 0xc000L, 

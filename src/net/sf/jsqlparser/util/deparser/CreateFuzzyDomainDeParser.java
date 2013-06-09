@@ -1,5 +1,8 @@
 package net.sf.jsqlparser.util.deparser;
 
+import java.util.List;
+import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.Similarity;
 import net.sf.jsqlparser.statement.create.fuzzy.domain.CreateFuzzyDomain;
 
 /**
@@ -20,11 +23,26 @@ public class CreateFuzzyDomainDeParser {
     public void deParse(CreateFuzzyDomain createFuzzyDomain) {
         buffer.append("CREATE FUZZY DOMAIN ")
               .append(createFuzzyDomain.getName())
-              .append(" ");
+              .append(" AS VALUES ");
         ExpressionDeParser expressionDeParser = new ExpressionDeParser(null, buffer);
         try {
             createFuzzyDomain.getValues().accept(expressionDeParser);
         } catch (Exception e) {
+        }
+        boolean first = true;
+        List<Similarity> similarityList = createFuzzyDomain.getSimilarities();
+        if (similarityList.size() > 0) {
+            buffer.append(" {");
+            for (Similarity s : similarityList) {
+                if (!first) {
+                    buffer.append(", ");
+                }
+                try {
+                    s.accept(expressionDeParser);
+                } catch (Exception e) {
+                }
+            }
+            buffer.append("}");
         }
     }
 

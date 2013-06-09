@@ -88,6 +88,7 @@ public interface ExpressionVisitor {
 	public void visit(BitwiseOr bitwiseOr) throws Exception;
 	public void visit(BitwiseXor bitwiseXor) throws Exception;
 	public void visit(SimilarColumn similarColumn) throws Exception;
+	public void visit(Similarity similarity) throws Exception;
 
 
 }

@@ -311,6 +311,7 @@ public interface CCJSqlParserConstants {
     "\"{t\"",
     "\"{ts\"",
     "\"{fn\"",
+    "\"{\"",
   };
 
 }

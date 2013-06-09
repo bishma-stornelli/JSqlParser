@@ -18,6 +18,7 @@ import net.sf.jsqlparser.expression.LongValue;
 import net.sf.jsqlparser.expression.NullValue;
 import net.sf.jsqlparser.expression.Parenthesis;
 import net.sf.jsqlparser.expression.SimilarColumn;
+import net.sf.jsqlparser.expression.Similarity;
 import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.TimeValue;
 import net.sf.jsqlparser.expression.TimestampValue;
@@ -442,6 +443,25 @@ public class ExpressionDeParser implements ExpressionVisitor, ItemsListVisitor {
     }
 
     public void visit(SimilarColumn similarColumn) {
-        buffer.append(similarColumn.toString());
+        //sql doesn't accept FUZZY syntax
+        //buffer.append(" SIMILAR ");
+        try{
+            similarColumn.getColumn().accept(this);
+        }catch(Exception e) {}
+    }
+
+    public void visit(Similarity similarity) {
+        buffer.append("(");
+        try{
+            similarity.getLabel1().accept(this);
+        }catch(Exception e) {}
+        buffer.append(",");
+        try{
+            similarity.getLabel2().accept(this);
+        }catch(Exception e) {}
+        buffer.append(") / ");
+        try{
+            similarity.getValue().accept(this);
+        }catch(Exception e) {}
     }
 }

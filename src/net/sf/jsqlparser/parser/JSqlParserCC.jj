@@ -75,6 +75,7 @@ import net.sf.jsqlparser.expression.WhenClause;
 import net.sf.jsqlparser.expression.AnyComparisonExpression;
 import net.sf.jsqlparser.expression.AllComparisonExpression;
 import net.sf.jsqlparser.expression.SimilarColumn;
+import net.sf.jsqlparser.expression.Similarity;
 import net.sf.jsqlparser.expression.operators.arithmetic.Addition;
 import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseAnd;
 import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseOr;
@@ -1696,18 +1697,37 @@ CreateTable CreateTable():
 
 CreateFuzzyDomain CreateFuzzyDomain():
 {
-    Token domain = null;
-    Expression value = null;
-    ArrayList<Expression> list = new ArrayList<Expression>();
+    Token domain;
+    Expression expression;
+    Similarity similarity;
+    ArrayList<Expression> expressionList = new ArrayList<Expression>();
+    ArrayList<Similarity> similarityList = new ArrayList<Similarity>();
 }
 {
-    <K_CREATE> <K_FUZZY> <K_DOMAIN> domain=<S_IDENTIFIER> <K_AS> <K_VALUES> "("
-        value=PrimaryExpression() {list.add(value);}
-            ("," value=PrimaryExpression() {list.add(value);})* ")"
-    {  return new CreateFuzzyDomain(domain.image, new ExpressionList(list));   }
-}
+    <K_CREATE> <K_FUZZY> <K_DOMAIN> domain=<S_IDENTIFIER> <K_AS> <K_VALUES>
+    "("
+        expression=PrimaryExpression() {expressionList.add(expression);}
+            ("," expression=PrimaryExpression() {expressionList.add(expression);})*
+    ")"
 
-//CREATE FUZZY DOMAIN <name> AS VALUES (<label >[,<label>,…,<label>]) [SIMILARITY { (<label>,<label>) / <value> [,(<label>,<label>) / <value>,…, (<label>,<label>) / <value> ] } ]
+    [<K_SIMILARITY> "{" similarity=Similarity() {similarityList.add(similarity); }
+            ("," similarity=Similarity() {similarityList.add(similarity);} )* "}" ]
+
+    {  return new CreateFuzzyDomain(domain.image,
+                                    new ExpressionList(expressionList),
+                                    similarityList);   }
+}
+Similarity Similarity():
+{
+    Expression label1, label2;
+    Token token = null;
+    String tmp = "";
+}
+{
+    "(" label1=PrimaryExpression() "," label2=PrimaryExpression() ")"
+        "/" [ "+" | "-" { tmp = "-"; }] token=<S_DOUBLE>
+    { return new Similarity(label1, label2, new DoubleValue(tmp+token.image)); }
+}
 
 ColDataType ColDataType():
 {
