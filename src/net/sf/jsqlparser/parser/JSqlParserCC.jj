@@ -1731,7 +1731,7 @@ Similarity Similarity():
 }
 {
     "(" label1=PrimaryExpression() "," label2=PrimaryExpression() ")"
-        "/" [ "+" | "-" { tmp = "-"; }] token=<S_DOUBLE>
+        "/" [ "+" | "-" { tmp = "-"; }] ( token=<S_DOUBLE> | token=<S_INTEGER> )
     { return new Similarity(label1, label2, new DoubleValue(tmp+token.image)); }
 }
 
