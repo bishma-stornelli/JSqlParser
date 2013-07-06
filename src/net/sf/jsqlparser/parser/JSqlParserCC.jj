@@ -1708,20 +1708,27 @@ CreateFuzzyDomain CreateFuzzyDomain():
     Similarity similarity;
     ArrayList<Expression> expressionList = new ArrayList<Expression>();
     ArrayList<Similarity> similarityList = new ArrayList<Similarity>();
+
+    Column column;
 }
 {
     <K_CREATE> <K_FUZZY> <K_DOMAIN> domain=<S_IDENTIFIER> <K_AS> <K_VALUES>
-    "("
-        expression=PrimaryExpression() {expressionList.add(expression);}
-            ("," expression=PrimaryExpression() {expressionList.add(expression);})*
-    ")"
+    (
+        "("
+            expression=PrimaryExpression() {expressionList.add(expression);}
+                ("," expression=PrimaryExpression() {expressionList.add(expression);})*
+        ")"
 
-    [<K_SIMILARITY> "{" similarity=Similarity() {similarityList.add(similarity); }
-            ("," similarity=Similarity() {similarityList.add(similarity);} )* "}" ]
+        [<K_SIMILARITY> "{" similarity=Similarity() {similarityList.add(similarity); }
+                ("," similarity=Similarity() {similarityList.add(similarity);} )* "}" ]
 
-    {  return new CreateFuzzyDomain(domain.image,
-                                    new ExpressionList(expressionList),
-                                    new ExpressionList(similarityList));   }
+        {  return new CreateFuzzyDomain(domain.image,
+                                        new ExpressionList(expressionList),
+                                        new ExpressionList(similarityList));   }
+    |
+        <K_FROM> column=Column()
+        { return new CreateFuzzyDomain(domain.image, column); }
+    )
 }
 Similarity Similarity():
 {

@@ -1,9 +1,8 @@
 package net.sf.jsqlparser.statement.create.fuzzy.domain;
 
-import java.util.List;
 import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.Similarity;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
+import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.StatementVisitor;
 
@@ -15,12 +14,18 @@ public class CreateFuzzyDomain implements Statement {
     private String name;
     private ExpressionList values;
     private ExpressionList similarityList;
+    private Column column;
 
     public CreateFuzzyDomain(String name, ExpressionList values,
             ExpressionList similarityList) {
         this.name = name;
         this.values = values;
         this.similarityList = similarityList;
+    }
+
+    public CreateFuzzyDomain(String name, Column column) {
+        this.name = name;
+        this.column = column;
     }
 
     public void accept(StatementVisitor statementVisitor) throws Exception {
@@ -64,5 +69,13 @@ public class CreateFuzzyDomain implements Statement {
             sql += " SIMILARITY {" + similarityList.toString(false) + "}";
         }
         return sql;
+    }
+
+    public boolean isFromColumn() {
+        return null != column;
+    }
+
+    public Column getFromColumn() {
+        return this.column;
     }
 }
