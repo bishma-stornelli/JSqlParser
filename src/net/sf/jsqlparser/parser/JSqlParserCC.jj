@@ -104,12 +104,15 @@ import net.sf.jsqlparser.expression.operators.relational.NotEqualsTo;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.Statement;
-import net.sf.jsqlparser.statement.create.table.ColDataType;
-import net.sf.jsqlparser.statement.create.table.ColumnDefinition;
-import net.sf.jsqlparser.statement.create.table.CreateTable;
-import net.sf.jsqlparser.statement.create.table.Index;
-import net.sf.jsqlparser.statement.create.fuzzy.domain.CreateFuzzyDomain;
-import net.sf.jsqlparser.statement.alter.fuzzy.domain.AlterFuzzyDomain;
+import net.sf.jsqlparser.statement.table.AlterOperation;
+import net.sf.jsqlparser.statement.table.AlterTable;
+import net.sf.jsqlparser.statement.table.ChangeColumn;
+import net.sf.jsqlparser.statement.table.ColDataType;
+import net.sf.jsqlparser.statement.table.ColumnDefinition;
+import net.sf.jsqlparser.statement.table.CreateTable;
+import net.sf.jsqlparser.statement.table.Index;
+import net.sf.jsqlparser.statement.fuzzy.domain.CreateFuzzyDomain;
+import net.sf.jsqlparser.statement.fuzzy.domain.AlterFuzzyDomain;
 import net.sf.jsqlparser.statement.delete.Delete;
 import net.sf.jsqlparser.statement.drop.Drop;
 import net.sf.jsqlparser.statement.insert.Insert;
@@ -214,6 +217,7 @@ TOKEN: /* SQL Keywords. prefixed with K_ to avoid name clashes */
 |   <K_VALUES:"VALUES">
 |   <K_ESCAPE:"ESCAPE">
 |   <K_DOMAIN:"DOMAIN">
+|   <K_CHANGE:"CHANGE">
 |   <K_PRIMARY:"PRIMARY">
 |   <K_NATURAL:"NATURAL">
 |   <K_REPLACE:"REPLACE">
@@ -279,7 +283,10 @@ Statement Statement() :
     |
     stm = CreateTable()
     |
+    LOOKAHEAD(<K_ALTER> <K_FUZZY>)
     stm = AlterFuzzyDomain()
+    |
+    stm = AlterTable()
     |
     stm = Drop()
     |
@@ -1559,9 +1566,7 @@ CreateTable CreateTable():
 	CreateTable createTable = new CreateTable();
 	Table table = null;
 	ArrayList columnDefinitions = new ArrayList();
-	List columnSpecs = null;
 	List tableOptions = new ArrayList();
-	Token columnName;
 	Token tk = null;
 	Token tk2 = null;
 	Token tk3 = null;
@@ -1581,25 +1586,7 @@ CreateTable CreateTable():
 
 	<K_TABLE> table=Table() 
 	[
-		"("
-		
-		columnName=<S_IDENTIFIER>
-		colDataType = ColDataType()
-		{
-			columnSpecs = new ArrayList();
-		}
-	
-		( parameter=CreateParameter() { columnSpecs.add(parameter); } )*
-	
-		{ 
-			coldef = new ColumnDefinition();
-			coldef.setColumnName(columnName.image);
-			coldef.setColDataType(colDataType);
-			if (columnSpecs.size() > 0)
-				coldef.setColumnSpecStrings(columnSpecs);
-			columnDefinitions.add(coldef);
-		}
-		
+		"(" coldef=ColumnDefinition() { columnDefinitions.add(coldef);}
 		(
 			","
 			
@@ -1642,22 +1629,8 @@ CreateTable CreateTable():
 				)
 				|
 				(
-					columnName=<S_IDENTIFIER> 
-					colDataType = ColDataType()
-					{
-						columnSpecs = new ArrayList();
-					}
-				
-					( 	parameter=CreateParameter() { columnSpecs.add(parameter); } 	)*
-		
-					{ 
-						coldef = new ColumnDefinition();
-						coldef.setColumnName(columnName.image);
-						coldef.setColDataType(colDataType);
-						if (columnSpecs.size() > 0)
-							coldef.setColumnSpecStrings(columnSpecs);
-						columnDefinitions.add(coldef);
-					}
+					coldef=ColumnDefinition()
+                                        { columnDefinitions.add(coldef);}
 				)/*
 				|
 				(
@@ -1699,6 +1672,110 @@ CreateTable CreateTable():
 		return createTable;
 	}
 	
+}
+
+ColumnDefinition ColumnDefinition():
+{
+    ColumnDefinition coldef;
+    ArrayList columnSpecs;
+    ColDataType colDataType;
+    Token columnName;
+    String parameter;
+}
+{
+
+    columnName=<S_IDENTIFIER> 
+    colDataType = ColDataType()
+    {
+            columnSpecs = new ArrayList();
+    }
+
+    ( 	parameter=CreateParameter() { columnSpecs.add(parameter); } 	)*
+
+    { 
+            coldef = new ColumnDefinition();
+            coldef.setColumnName(columnName.image);
+            coldef.setColDataType(colDataType);
+            if (columnSpecs.size() > 0)
+                    coldef.setColumnSpecStrings(columnSpecs);
+            return coldef;
+    }
+}
+
+ColDataType ColDataType():
+{
+	ColDataType colDataType = new ColDataType();
+	Token tk = null;
+	ArrayList argumentsStringList = new ArrayList();
+}
+{
+	( tk=<S_IDENTIFIER> { colDataType.setDataType(tk.image); } )
+		
+	
+	[LOOKAHEAD(2) "(" ( (tk=<S_INTEGER> | tk=<S_CHAR_LITERAL>) { argumentsStringList.add(tk.image); } ["," {/*argumentsStringList.add(",");*/}] )*    ")"]
+	{
+		if (argumentsStringList.size() > 0)
+			colDataType.setArgumentsStringList(argumentsStringList);
+		return colDataType;
+	}
+}
+
+String CreateParameter():
+{
+	String retval = null;
+	Token tk = null;
+}
+{
+		(
+			tk=<S_IDENTIFIER> { retval = tk.image; } 
+			|
+			tk=<K_NULL> { retval = tk.image; } 
+			|
+			tk=<K_NOT> { retval = tk.image; } 
+			|
+			tk=<K_PRIMARY> { retval = tk.image; } 
+			|
+			tk=<K_KEY> { retval = tk.image; } 
+			|
+			tk=<S_CHAR_LITERAL> { retval = tk.image; } 
+			|
+			tk=<S_INTEGER> { retval = tk.image; } 
+			|
+			tk=<S_DOUBLE> { retval = tk.image; } 
+			|
+			"=" { retval = "="; } 
+			| 
+			retval=AList()
+		)
+	{return retval;}
+}
+
+AlterTable AlterTable():
+{
+    AlterTable alterTable;
+    Table table;
+    AlterOperation alterOperation;
+    ArrayList<AlterOperation> alterOperations = new ArrayList<AlterOperation>();
+}
+{
+    <K_ALTER> <K_TABLE> table=Table() alterOperation=ChangeColumn()
+        { alterOperations.add(alterOperation); }
+            ("," alterOperation=ChangeColumn()
+                { alterOperations.add(alterOperation); })*
+    {
+        return new AlterTable(table, alterOperations);
+    }
+}
+
+ChangeColumn ChangeColumn():
+{
+    String colorg, colnew;
+    ColumnDefinition columnDefinition;
+}
+{
+    <K_CHANGE> colorg=RelObjectName() colnew=RelObjectName()
+               columnDefinition=ColumnDefinition()
+    { return new ChangeColumn(colorg, colnew, columnDefinition); }
 }
 
 CreateFuzzyDomain CreateFuzzyDomain():
@@ -1795,54 +1872,6 @@ Relation Relation():
 {
     "(" label1=PrimaryExpression() "," label2=PrimaryExpression() ")"
     { return new Relation(label1, label2); }
-}
-
-ColDataType ColDataType():
-{
-	ColDataType colDataType = new ColDataType();
-	Token tk = null;
-	ArrayList argumentsStringList = new ArrayList();
-}
-{
-	( tk=<S_IDENTIFIER> { colDataType.setDataType(tk.image); } )
-		
-	
-	[LOOKAHEAD(2) "(" ( (tk=<S_INTEGER> | tk=<S_CHAR_LITERAL>) { argumentsStringList.add(tk.image); } ["," {/*argumentsStringList.add(",");*/}] )*    ")"]
-	{
-		if (argumentsStringList.size() > 0)
-			colDataType.setArgumentsStringList(argumentsStringList);
-		return colDataType;
-	}
-}
-
-String CreateParameter():
-{
-	String retval = null;
-	Token tk = null;
-}
-{
-		(
-			tk=<S_IDENTIFIER> { retval = tk.image; } 
-			|
-			tk=<K_NULL> { retval = tk.image; } 
-			|
-			tk=<K_NOT> { retval = tk.image; } 
-			|
-			tk=<K_PRIMARY> { retval = tk.image; } 
-			|
-			tk=<K_KEY> { retval = tk.image; } 
-			|
-			tk=<S_CHAR_LITERAL> { retval = tk.image; } 
-			|
-			tk=<S_INTEGER> { retval = tk.image; } 
-			|
-			tk=<S_DOUBLE> { retval = tk.image; } 
-			|
-			"=" { retval = "="; } 
-			| 
-			retval=AList()
-		)
-	{return retval;}
 }
 
 String AList():

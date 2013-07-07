@@ -3,15 +3,16 @@ package net.sf.jsqlparser.util.deparser;
 import java.util.Iterator;
 
 import net.sf.jsqlparser.statement.StatementVisitor;
-import net.sf.jsqlparser.statement.alter.fuzzy.domain.AlterFuzzyDomain;
-import net.sf.jsqlparser.statement.create.fuzzy.domain.CreateFuzzyDomain;
-import net.sf.jsqlparser.statement.create.table.CreateTable;
+import net.sf.jsqlparser.statement.fuzzy.domain.AlterFuzzyDomain;
+import net.sf.jsqlparser.statement.fuzzy.domain.CreateFuzzyDomain;
+import net.sf.jsqlparser.statement.table.CreateTable;
 import net.sf.jsqlparser.statement.delete.Delete;
 import net.sf.jsqlparser.statement.drop.Drop;
 import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.replace.Replace;
 import net.sf.jsqlparser.statement.select.Select;
 import net.sf.jsqlparser.statement.select.WithItem;
+import net.sf.jsqlparser.statement.table.AlterTable;
 import net.sf.jsqlparser.statement.truncate.Truncate;
 import net.sf.jsqlparser.statement.update.Update;
 
@@ -26,6 +27,11 @@ public class StatementDeParser implements StatementVisitor {
     public void visit(CreateTable createTable) {
         CreateTableDeParser createTableDeParser = new CreateTableDeParser(buffer);
         createTableDeParser.deParse(createTable);
+    }
+
+    public void visit(AlterTable alterTable) {
+        AlterTableDeParser alterTableDeParser = new AlterTableDeParser(buffer);
+        alterTableDeParser.deParse(alterTable);
     }
 
     public void visit(CreateFuzzyDomain createFuzzyDomain) {

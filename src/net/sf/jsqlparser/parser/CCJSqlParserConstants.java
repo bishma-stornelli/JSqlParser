@@ -152,51 +152,53 @@ public interface CCJSqlParserConstants {
   /** RegularExpression Id. */
   int K_DOMAIN = 63;
   /** RegularExpression Id. */
-  int K_PRIMARY = 64;
+  int K_CHANGE = 64;
   /** RegularExpression Id. */
-  int K_NATURAL = 65;
+  int K_PRIMARY = 65;
   /** RegularExpression Id. */
-  int K_REPLACE = 66;
+  int K_NATURAL = 66;
   /** RegularExpression Id. */
-  int K_BETWEEN = 67;
+  int K_REPLACE = 67;
   /** RegularExpression Id. */
-  int K_FOREIGN = 68;
+  int K_BETWEEN = 68;
   /** RegularExpression Id. */
-  int K_SIMILAR = 69;
+  int K_FOREIGN = 69;
   /** RegularExpression Id. */
-  int K_TRUNCATE = 70;
+  int K_SIMILAR = 70;
   /** RegularExpression Id. */
-  int K_DISTINCT = 71;
+  int K_TRUNCATE = 71;
   /** RegularExpression Id. */
-  int K_STARTING = 72;
+  int K_DISTINCT = 72;
   /** RegularExpression Id. */
-  int K_INTERSECT = 73;
+  int K_STARTING = 73;
   /** RegularExpression Id. */
-  int K_CONSTRAINT = 74;
+  int K_INTERSECT = 74;
   /** RegularExpression Id. */
-  int K_REFERENCES = 75;
+  int K_CONSTRAINT = 75;
   /** RegularExpression Id. */
-  int K_SIMILARITY = 76;
+  int K_REFERENCES = 76;
   /** RegularExpression Id. */
-  int S_DOUBLE = 77;
+  int K_SIMILARITY = 77;
   /** RegularExpression Id. */
-  int S_INTEGER = 78;
+  int S_DOUBLE = 78;
   /** RegularExpression Id. */
-  int DIGIT = 79;
+  int S_INTEGER = 79;
   /** RegularExpression Id. */
-  int LINE_COMMENT = 80;
+  int DIGIT = 80;
   /** RegularExpression Id. */
-  int MULTI_LINE_COMMENT = 81;
+  int LINE_COMMENT = 81;
   /** RegularExpression Id. */
-  int S_IDENTIFIER = 82;
+  int MULTI_LINE_COMMENT = 82;
   /** RegularExpression Id. */
-  int LETTER = 83;
+  int S_IDENTIFIER = 83;
   /** RegularExpression Id. */
-  int SPECIAL_CHARS = 84;
+  int LETTER = 84;
   /** RegularExpression Id. */
-  int S_CHAR_LITERAL = 85;
+  int SPECIAL_CHARS = 85;
   /** RegularExpression Id. */
-  int S_QUOTED_IDENTIFIER = 86;
+  int S_CHAR_LITERAL = 86;
+  /** RegularExpression Id. */
+  int S_QUOTED_IDENTIFIER = 87;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -267,6 +269,7 @@ public interface CCJSqlParserConstants {
     "\"VALUES\"",
     "\"ESCAPE\"",
     "\"DOMAIN\"",
+    "\"CHANGE\"",
     "\"PRIMARY\"",
     "\"NATURAL\"",
     "\"REPLACE\"",

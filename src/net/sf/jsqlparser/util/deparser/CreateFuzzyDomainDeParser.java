@@ -2,7 +2,7 @@ package net.sf.jsqlparser.util.deparser;
 
 import net.sf.jsqlparser.expression.Similarity;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
-import net.sf.jsqlparser.statement.create.fuzzy.domain.CreateFuzzyDomain;
+import net.sf.jsqlparser.statement.fuzzy.domain.CreateFuzzyDomain;
 
 /**
  * A class to de-parse (that is, tranform from JSqlParser hierarchy into a string)

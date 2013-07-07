@@ -2,9 +2,9 @@ package net.sf.jsqlparser.util.deparser;
 
 import java.util.Iterator;
 
-import net.sf.jsqlparser.statement.create.table.ColumnDefinition;
-import net.sf.jsqlparser.statement.create.table.CreateTable;
-import net.sf.jsqlparser.statement.create.table.Index;
+import net.sf.jsqlparser.statement.table.ColumnDefinition;
+import net.sf.jsqlparser.statement.table.CreateTable;
+import net.sf.jsqlparser.statement.table.Index;
 
 /**
  * A class to de-parse (that is, tranform from JSqlParser hierarchy into a string)

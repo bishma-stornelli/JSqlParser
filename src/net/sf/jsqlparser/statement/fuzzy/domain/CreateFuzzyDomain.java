@@ -1,4 +1,4 @@
-package net.sf.jsqlparser.statement.create.fuzzy.domain;
+package net.sf.jsqlparser.statement.fuzzy.domain;
 
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;

@@ -1,6 +1,6 @@
 package net.sf.jsqlparser.util.deparser;
 
-import net.sf.jsqlparser.statement.alter.fuzzy.domain.AlterFuzzyDomain;
+import net.sf.jsqlparser.statement.fuzzy.domain.AlterFuzzyDomain;
 
 /**
  * A class to de-parse (that is, tranform from JSqlParser hierarchy into a string)
