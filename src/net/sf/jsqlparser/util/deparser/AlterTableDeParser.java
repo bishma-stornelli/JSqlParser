@@ -41,8 +41,6 @@ public class AlterTableDeParser {
                 buffer.append("CHANGE ");
                 buffer.append(changeColumn.getColumnOld());
                 buffer.append(" ");
-                buffer.append(changeColumn.getColumnNew());
-                buffer.append(" ");
                 buffer.append(columnDefinition.getColDataType().getDataType());
                 if (columnDefinition.getColDataType().getArgumentsStringList() != null) {
                     for (Iterator iterator = columnDefinition.getColDataType().getArgumentsStringList().iterator(); iterator.hasNext();) {

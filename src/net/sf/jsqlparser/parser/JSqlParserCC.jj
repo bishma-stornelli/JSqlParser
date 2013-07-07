@@ -1773,9 +1773,9 @@ ChangeColumn ChangeColumn():
     ColumnDefinition columnDefinition;
 }
 {
-    <K_CHANGE> colorg=RelObjectName() colnew=RelObjectName()
+    <K_CHANGE> colorg=RelObjectName()
                columnDefinition=ColumnDefinition()
-    { return new ChangeColumn(colorg, colnew, columnDefinition); }
+    { return new ChangeColumn(colorg, columnDefinition); }
 }
 
 CreateFuzzyDomain CreateFuzzyDomain():

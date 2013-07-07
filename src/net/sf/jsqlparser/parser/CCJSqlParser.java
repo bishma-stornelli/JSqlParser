@@ -3128,9 +3128,8 @@ public class CCJSqlParser implements CCJSqlParserConstants {
     ColumnDefinition columnDefinition;
     jj_consume_token(K_CHANGE);
     colorg = RelObjectName();
-    colnew = RelObjectName();
     columnDefinition = ColumnDefinition();
-      {if (true) return new ChangeColumn(colorg, colnew, columnDefinition);}
+      {if (true) return new ChangeColumn(colorg, columnDefinition);}
     throw new Error("Missing return statement in function");
   }
 
