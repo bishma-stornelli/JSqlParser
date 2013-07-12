@@ -319,6 +319,8 @@ public class ExpressionDeParser implements ExpressionVisitor, ItemsListVisitor {
             if (function.isDistinct()) {
                 useBracketsInExprList = false;
                 buffer.append("(DISTINCT ");
+            } else {
+                useBracketsInExprList = true;
             }
             visit(function.getParameters());
             useBracketsInExprList = oldUseBracketsInExprList;
